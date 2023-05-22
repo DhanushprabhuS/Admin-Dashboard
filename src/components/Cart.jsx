@@ -7,8 +7,8 @@ import { cartData } from '../data/dummy';
 import { Button } from '.';
 
 const Cart = () => {
-  const { currentColor,handleClick } = useStateContext();
-
+  const { currentColor,handleClick, cartItems, handleClickCart, total, cartQty, handleCoupon, deTotal, isApplied } = useStateContext();
+  let items = ['iceCream','tomato','candy']
   return (
     <div className="bg-half-transparent w-full fixed nav-item top-0 right-0 ">
       <div className="float-right h-screen  duration-1000 ease-in-out dark:text-gray-200 transition-all dark:bg-[#484B52] bg-white md:w-400 p-8">
@@ -31,11 +31,23 @@ const Cart = () => {
                   <p className="font-semibold ">{item.name}</p>
                   <p className="text-gray-600 dark:text-gray-400 text-sm font-semibold">{item.category}</p>
                   <div className="flex gap-4 mt-2 items-center">
-                    <p className="font-semibold text-lg">{item.price}</p>
-                    <div className="flex items-center border-1 border-r-0 border-color rounded">
-                      <p className="p-2 border-r-1 dark:border-gray-600 border-color text-red-600 "><AiOutlineMinus /></p>
-                      <p className="p-2 border-r-1 border-color dark:border-gray-600 text-green-600">0</p>
-                      <p className="p-2 border-r-1 border-color dark:border-gray-600 text-green-600"><AiOutlinePlus /></p>
+                    <p className="font-semibold text-lg">{cartItems[[items[index]]]}</p>
+                    <div className="flex items-center border-1 border-r-1 dark:border-gray-300 border-color rounded">
+                      <p className="p-2 border-r-1 dark:border-gray-300 border-color text-red-600 ">
+                        <button onClick={()=>{
+                        handleClickCart(items[index],false);
+                      }}>
+                        <AiOutlineMinus />
+                        </button>
+                      </p>
+                      <p className="p-2 border-r-1 border-color dark:border-gray-300 text-green-600">{cartQty[[items[index]]]}</p>
+                      <p className="p-2 border-r-1 border-color dark:border-gray-300 text-green-600">
+                        <button onClick={()=>{
+                        handleClickCart(items[index],true);
+                      }}>
+                        <AiOutlinePlus />
+                        </button>
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -46,12 +58,20 @@ const Cart = () => {
         <div className="mt-3 mb-3">
           <div className="flex justify-between items-center">
             <p className="text-gray-500 dark:text-gray-200">Sub Total</p>
-            <p className="font-semibold">$890</p>
+            <p className="font-semibold">${total}</p>
           </div>
           <div className="flex justify-between items-center mt-3">
-            <p className="text-gray-500 dark:text-gray-200">Total</p>
-            <p className="font-semibold">$890</p>
+            <p className="text-gray-500 dark:text-gray-200">Apply Coupon</p>
+            <input placeholder='REACTJS' className="px-4 w-30 border rounded py-2 focus:outline dark:text-gray-600" 
+            onKeyDown={(e)=>handleCoupon(e)} 
+            onBlur={(e)=>handleCoupon(e)}/>
           </div>
+          <p className="text-gray-500 dark:text-gray-200 text-xs items-center">Only applicable for minimum total of $1500</p>
+          <div className="flex justify-between items-center mt-3">
+            <p className="text-gray-500 dark:text-gray-200">Total</p>
+            <p className="font-semibold">${deTotal}</p>
+          </div>
+          {isApplied?<p className="text-gray-500 dark:text-gray-200 text-xs items-center">Coupon Applied $1000 deducted!</p>:""}
         </div>
         <div className="mt-5">
           <Button
